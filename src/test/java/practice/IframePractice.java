@@ -2,38 +2,35 @@ package practice;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import utilities.ConfigurationReader;
+import utilities.Driver;
 import utilities.WebDriverFactory;
 
 public class IframePractice {
 
-    public WebDriver driver;
-
-
-    @BeforeMethod
-    public void setupMethod(){
-
-        String browserType = ConfigurationReader.getPropertyCustom("browser");
-        driver = WebDriverFactory.getDriver(browserType);
-    }
-
-
     @Test
     public void test1(){
 
-        driver.get("http://practice.cybertekschool.com/iframe");
+        Driver.getDriver().get(ConfigurationReader.getPropertyCustom("practice.url"));
 
-        driver.switchTo().frame("mce_0_ifr");
+        Driver.getDriver().findElement(By.xpath("//a[text() = 'Frames']")).click();
 
-        driver.switchTo().frame(0);
+        Driver.getDriver().findElement(By.linkText("Nested Frames")).click();
 
-        driver.switchTo().frame(driver.findElement(By.xpath("//iframe[@id = 'mce_0_ifr']")));
+        Driver.getDriver().switchTo().frame("frame-top");
 
-        driver.switchTo().parentFrame();
-      //  driver.switchTo().defaultContent();
+        Driver.getDriver().switchTo().frame("frame-left");
+
+        WebElement left = Driver.getDriver().findElement(By.xpath("//body[normalize-space(text()) = 'LEFT']"));
+
+        System.out.println(left.getText());
+
+        Driver.getDriver().switchTo().defaultContent();
+    }
 
 
     }
-}
+
